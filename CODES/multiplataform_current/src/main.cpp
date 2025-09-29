@@ -34,7 +34,7 @@
 
 #include <Wire.h>
 #include <Adafruit_ADS1X15.h>
-#define CANTMUESTRAS 1000 //amostras a serem coletadas (amostras mais precisas, mas com maior tempo de execução)
+#define AMOSTRAS 1000 //amostras a serem coletadas (amostras mais precisas, mas com maior tempo de execução)
 #define AMAXSENS 100       // A corrente máxima do sensor neste caso é o SCT013, que oferece 30 A máx. a 1000 mV.
 #define MVMAXSENS 512    // MV máximo oferecido pelo sensor em sua corrente máxima suportada
 #define VOLTRED 220       // Tensão da rede
@@ -150,13 +150,13 @@ float med_Ieficaz() {
   float mVinstant;
   float sumIinstant=0;
 
-  for (int i = 0; i < CANTMUESTRAS; i++) {
+  for (int i = 0; i < AMOSTRAS; i++) {
     bitsads = ads.readADC_Differential_0_1();
     mVinstant = bitsads * mVporbit;
     Iinstant = mVinstant * AMAXSENS / MVMAXSENS;   // regra de três baseada no sensor conectado já que o sensor oferece tensão e a passamos diretamente proporcional à intensidade
     sumIinstant += sq(Iinstant);                   // soma dos quadrados
   }
-  Ieficaz = sqrt(sumIinstant / CANTMUESTRAS);        // raiz quadrada da soma dos quadrados dividida pelo número de amostras
+  Ieficaz = sqrt(sumIinstant / AMOSTRAS);        // raiz quadrada da soma dos quadrados dividida pelo número de amostras
 
   long tempofim = millis();
   Serial.print((tempofim - tempoinicio) / 1000);
